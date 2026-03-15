@@ -1,0 +1,9 @@
+* {
+  margin: 0; /* Zera a margem*/
+  padding: 0; /* Zera o espaçamento */
+  box-sizing: border-box; /* Tamanho da caixa sera o tamanho da tela*/
+}
+
+a {
+  text-decoration: none; /* Remove a linha abaixo dos links */
+}
