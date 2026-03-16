@@ -398,6 +398,10 @@
 
 /* RESPONSIVIDADE */
 @media (max-width: 1100px) {
+  .header {
+    position: relative;
+  }
+  
   .menuGrid {
     grid-template-columns: repeat(2, 1fr);
   }

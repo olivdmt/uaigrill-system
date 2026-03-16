@@ -519,6 +519,10 @@
 
 /* RESPONSIVIDADE */
 @media (max-width: 1100px) {
+  .header {
+    position: relative;
+  }
+  
   .highlightGrid {
     grid-template-columns: 1fr;
   }

@@ -620,6 +620,10 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    position: relative;
+  }
+  
   .navbar {
     min-height: auto;
     padding: 18px 0;
