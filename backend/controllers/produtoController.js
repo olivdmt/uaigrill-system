@@ -4,7 +4,10 @@ import Product from '../models/produtos.js';
 export const getAllProducts = async(req,res) => {
     try {
         // Busca por todos os produtos no Banco
-        const products = await Product.findAll();
+        const products = await Product.findAll({
+            // Usamos where para o banco já filtrar e poupar memória
+            where: { disponibilidade: true}
+        });
         // Retorna a resposta pro cliente
         res.status(200).json(products);
     } catch (error) {
@@ -16,8 +19,10 @@ export const getAllProducts = async(req,res) => {
 // ROTA POST: Função assincrona para criar um novo produto
 export const createProducts = async(req, res) => {
     try {
+        // Desestruturação para Segurança
+        const {nome, descricao, categoria, preco,imagem, disponibilidade} = req.body;
         // Salva a requisição do body no postgres
-        const newProduct = await Product.create(req.body);
+        const newProduct = await Product.create({nome, descricao, categoria, preco,imagem, disponibilidade})
         res.status(201).json(newProduct);
     } catch (error) {
         // Se houver erro, ele exibi o log de erros
