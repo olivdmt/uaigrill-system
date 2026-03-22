@@ -25,7 +25,7 @@ function Home() {
           </ul>
 
           <Link to="/carrinho" className={styles.cartButton}>
-            Carrinho
+            <i className='fa-solid fa-cart-arrow-down'></i>
           </Link>
         </section>
       </header>

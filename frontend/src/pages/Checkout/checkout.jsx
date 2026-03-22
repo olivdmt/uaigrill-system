@@ -83,7 +83,7 @@ function Checkout() {
             <li><Link to="/contact">Contato</Link></li>
           </ul>
           <Link to="/carrinho" className={styles.cartButton}>
-            Carrinho ({cart.length})
+            <i className='fa-solid fa-cart-arrow-down'></i>  ({cart.length})
           </Link>
         </section>
       </header>
