@@ -2,9 +2,11 @@ import express from 'express';
 import usuariosRoutes from './routes/usuariosRoutes.js';
 import produtosRoutes from './routes/produtosRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
+import cors from 'cors';
 
 // Instância o express
 const app = express();
+app.use(cors());
 
 // Agora o express pode ler JSON
 app.use(express.json())

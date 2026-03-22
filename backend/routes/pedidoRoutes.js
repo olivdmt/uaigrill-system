@@ -5,6 +5,6 @@ import {create, getOrder} from '../controllers/pedidoController.js';
 const router = Router();
 
 router.post('/', create);
-router.get('/:id', getOrder);
+router.get('/', getOrder);
 
 export default router;

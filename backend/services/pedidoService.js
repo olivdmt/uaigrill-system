@@ -1,3 +1,7 @@
+import Cupom from '../models/cupom.js';
+import Produto from '../models/produtos.js';
+import Pedido from '../models/pedido.js';
+
 async function createOrder(dadosPedido) {
     let subtotal = 0;
     const taxaEntrega = Number(dadosPedido.entrega) || 0;

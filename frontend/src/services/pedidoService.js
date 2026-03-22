@@ -2,8 +2,8 @@ import api from './api';
 
 export const pedidoService = {
     // Listar todos os produtos para o cardápio
-    getProdutos: async () => {
-        const reponse = await api.get('/produtos');
+    getTodos: async () => {
+        const response = await api.get('/produtos');
         return response.data;
     },
 
