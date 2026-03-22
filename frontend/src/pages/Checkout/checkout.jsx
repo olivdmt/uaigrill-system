@@ -45,7 +45,7 @@ function Checkout() {
           nome: formData.nome,
           telefone: formData.telefone,
           endereco: metodoEntrega === 'Delivery' ? formData.endereco : 'Retirada no Local',
-          pagamento: formData.pagamento, // Corrigido de metodoPagamento para formData.pagamento
+          pagamento: formData.pagamento, 
           total: totalGeral
         }),
         {
@@ -63,7 +63,24 @@ function Checkout() {
     } catch (error) {
       console.error("Erro no checkout:", error);
     }
+    gerarNota();
   };
+
+  // Responsável por criar o nota fiscal
+  const gerarNota = (dadosDoPedido) => {
+    const nota = {
+      cliente: dadosDoPedido.nome,
+      contato: dadosDoPedido.telefone,
+      endereco: dadosDoPedido.endereco,
+      pagamento: dadosDoPedido.pagamento,
+      itens: cart.map(i => ({id: i.id, quantidade: i.quantidade, subtotal: (i.preco * i.quantidade).toFixed(2)})),
+      total: totalGeral.toFixed(2),
+      data: new Date().toLocaleString('pt-BR')
+    };
+    console.log(' --- NOTA FISCAL --- ');
+    console.log(JSON.stringify(nota, null, 2));
+    toast.success('Nota fiscal gerada com sucesso!');
+  }
 
   return (
     <div className={styles.container}>
