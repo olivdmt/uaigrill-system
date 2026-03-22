@@ -1,5 +1,11 @@
 import api from './api';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+const api = axios.create({
+    baseURL: API_URL
+});
+
 export const pedidoService = {
     // Listar todos os produtos para o cardápio
     getTodos: async () => {
