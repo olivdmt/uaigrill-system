@@ -1,5 +1,9 @@
 import app from './app.js';
 import sequelize from './config/db.js';
+import cors from 'cors'
+
+app.use(cors());
+
 import user from './models/usuarios.js';
 import product from './models/produtos.js';
 import cupom from './models/cupom.js';
