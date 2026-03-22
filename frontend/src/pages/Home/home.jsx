@@ -46,7 +46,7 @@ function Home() {
           </p>
 
           <div className={styles.btnHero}>
-            <Link to="/cardapio" className={styles.btnPrimary}>
+            <Link to="/menu" className={styles.btnPrimary}>
               Ver cardápio
             </Link>
 
