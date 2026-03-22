@@ -1,8 +1,28 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './cardapio.module.css';
 import logo from '../../assets/logoUaiGrill-01.png';
+import { produtoService } from '../../services/pedidoService';
 
 function Cardapio() {
+
+  const [produtos, setProdutos] = useState([]); // Array vazio
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        const dados = await produtoService.getTodos();
+        setProdutos(dados);
+      } catch (error) {
+        console.error("Erro loagind menu: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    carregarDados();
+  }, []);
+  
   return (
     <div className={styles.container}>
       {/* HEADER / NAVBAR */}

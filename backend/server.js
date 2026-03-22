@@ -2,6 +2,7 @@ import app from './app.js';
 import sequelize from './config/db.js';
 import user from './models/usuarios.js';
 import product from './models/produtos.js';
+import cupom from './models/cupom.js';
 
 // Função para conectar ao banco
 async function connectDatabase() {
@@ -23,7 +24,28 @@ async function connectDatabase() {
         // Não foi possivel conectar ao servidor
         console.error('Unable to connect to the database:', error);
     }
-    
+    /* 
+        CUPOM TEMPORÁRIO
+    */
+    // No seu server.js ou connectDatabase
+    // try {    
+    //     await cupom.findOrCreate({
+    //         where: { codigo: 'UAIGRILL10' },
+    //         defaults: {
+    //             tipo: 'Percentual',
+    //             valor: 10,
+    //             validade: '2026-12-31',
+    //             ativo: true
+    //         }
+    //     });
+    // } catch (err) {
+    //     if (err.name === 'SequelizeUniqueConstraintError') {
+    //         console.log('Cupom já cadastrado, pulando...');
+    //     } else {
+    //         console.error(err);
+    //     }
+    // }
+
 };
 
 connectDatabase();

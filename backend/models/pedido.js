@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db";
+import sequelize from "../config/db.js";
 
 
 // Cria a entidade pedido com os seguintes atributos no banco 
@@ -41,7 +41,7 @@ const pedido = sequelize.define('Pedido', {
     }  
 },{
     hooks: {
-        beforeCreate: (pedido) => {
+        beforeValidate: (pedido) => {
             // Gera um número aleatório de 4 digitos
             const numero = Math.floor(1000 + Math.random() * 9000);
             pedido.codigo = `#UG-${numero}`;

@@ -1,6 +1,7 @@
 import express from 'express';
-import usuariosRoutes from './routes/usuariosRoutes.js'
-import produtosRoutes from './routes/produtosRoutes.js'
+import usuariosRoutes from './routes/usuariosRoutes.js';
+import produtosRoutes from './routes/produtosRoutes.js';
+import pedidoRoutes from './routes/pedidoRoutes.js';
 
 // Instância o express
 const app = express();
@@ -15,5 +16,8 @@ app.use('/usuarios', usuariosRoutes);
 // Toda requisição que começar com "/produtos", manda para o arquivo de rotas de produtos 
 // Rotas para PRODUTOS
 app.use('/produtos', produtosRoutes);
+
+// Rotas para PEDIDOS
+app.use('/pedidos', pedidoRoutes);
 
 export default app;
