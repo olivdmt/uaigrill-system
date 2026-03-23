@@ -2,6 +2,7 @@ import express from 'express';
 import usuariosRoutes from './routes/usuariosRoutes.js';
 import produtosRoutes from './routes/produtosRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
+import promotionRoutes from './routes/promotionRoutes.js;'
 import cors from 'cors';
 
 // Instância o express
@@ -21,5 +22,8 @@ app.use('/produtos', produtosRoutes);
 
 // Rotas para PEDIDOS
 app.use('/pedidos', pedidoRoutes);
+
+// Rotas para PROMOÇÕES
+app.use('/promocoes', promotionRoutes);
 
 export default app;
