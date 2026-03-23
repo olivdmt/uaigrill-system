@@ -6,3 +6,5 @@ const router = Router();
 
 router.get('/', getPromotion);
 router.post('/', createPromotion);
+
+export default router;
