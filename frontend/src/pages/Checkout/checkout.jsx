@@ -5,6 +5,7 @@ import logo from '../../assets/logoUaiGrill-01.png';
 import { useCart } from '../../context/CartContext';
 import { pedidoService } from '../../services/pedidoService'; // ADICIONADO
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 function Checkout() {
   const { cart, subtotal, limparCarrinho } = useCart();
@@ -38,6 +39,16 @@ function Checkout() {
       return toast.error("Endereço é obrigatório para Delivery!");
     }
 
+    const dadosParaEnvio = {
+      itens: cart.map(item => ({ id: item.id, nome: item.nome, quantidade: item.quantidade })),
+      nome: formData.nome,
+      telefone: formData.telefone,
+      endereco: metodoEntrega === 'Delivery' ? formData.endereco : 'Retirada no Local',
+      pagamento: formData.pagamento, 
+      total: totalGeral
+    };
+  
+    
     try {
       await toast.promise(
         pedidoService.criarPedido({
@@ -51,6 +62,7 @@ function Checkout() {
         {
           loading: 'Enviando seu pedido para a brasa... 🔥',
           success: (res) => {
+            gerarNota(dadosParaEnvio);
             limparCarrinho(); 
             setTimeout(() => {
               navigate('/'); // Ou para a página de sucesso que você criar
@@ -63,7 +75,6 @@ function Checkout() {
     } catch (error) {
       console.error("Erro no checkout:", error);
     }
-    gerarNota();
   };
 
   // Responsável por criar o nota fiscal
@@ -77,9 +88,46 @@ function Checkout() {
       total: totalGeral.toFixed(2),
       data: new Date().toLocaleString('pt-BR')
     };
-    console.log(' --- NOTA FISCAL --- ');
-    console.log(JSON.stringify(nota, null, 2));
-    toast.success('Nota fiscal gerada com sucesso!');
+
+    //  const itensHTML = nota.itens.map(item => `
+    //   <div style="display:flex; justify-content:space-between;">
+    //     <span>${item.nome} x${item.quantidade}</span>
+    //     <span>R$ ${item.subtotal}</span>
+    //   </div>
+    // `).join('')
+    
+    // const notaFiscal = Swal.fire({
+    //   title: 'Nota Fiscal',
+    //   html: `
+    //     <div style="text-align:left; font-family: monospace;">
+
+    //       <h3 style="text-align:center;">UaiGrill 🍔</h3>
+    //       <p style="text-align:center;">--------------------------------</p>
+
+    //       <p><strong>Data:</strong> ${nota.data}</p>
+    //       <p><strong>Cliente:</strong> ${nota.cliente}</p>
+    //       <p><strong>Telefone:</strong> ${nota.contato}</p>
+    //       <p><strong>Endereço:</strong> ${nota.endereco}</p>
+    //       <p><strong>Pagamento:</strong> ${nota.pagamento}</p>
+
+    //       <p>--------------------------------</p>
+
+    //       ${itensHTML}
+
+    //       <p>--------------------------------</p>
+
+    //       <div style="display:flex; justify-content:space-between; font-weight:bold;">
+    //         <span>Total:</span>
+    //         <span>R$ ${nota.total}</span>
+    //       </div>
+
+    //     </div>
+    //   `
+    // })
+    // console.log(' --- NOTA FISCAL --- ');
+    // console.log(JSON.stringify(nota, null, 2));
+    
+    toast.success('Nota fiscal gerada com sucesso!')
   }
 
   return (
