@@ -4,7 +4,7 @@ import Promotion from '../models/promocao.js';
 export const getPromotion = async(req, res) => {
     try {
         const promotions = await Promotion.findAll({
-            where: {  disponiblidade: true }
+            where: {  disponibilidade: true }
         });
         res.status(200).json(promotions);
     } catch (error) {
