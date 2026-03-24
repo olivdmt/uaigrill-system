@@ -9,7 +9,7 @@ import logo from '../../assets/logoUaiGrill-01.png';
 
 function Promocoes() {
   // Atributo que criamos para adicionar ao carrinho
-  const {addToCart, cart} = useCart();
+  const { addToCart, cart } = useCart();
   const [promocoes, setPromocoes] = useState([]); // Array vazio
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +29,14 @@ function Promocoes() {
     }
     carregarDados();
   }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <p>Carregando as melhores ofertas do UaiGrill...</p>
+      </div>
+    );
+  }
 
   const handleAdicionar = (promocao) => {
     addToCart(promocao); // Chama a função do context
@@ -69,7 +77,7 @@ function Promocoes() {
           </ul>
 
           <Link to="/carrinho" className={styles.cartButton}>
-            Carrinho
+            <i className='fa-solid fa-cart-arrow-down'></i> ({cart.length})
           </Link>
         </section>
       </header>
@@ -105,12 +113,14 @@ function Promocoes() {
           <h2>Promoções da semana</h2>
           <p>As ofertas mais procuradas para aproveitar mais sabor pagando menos.</p>
         </div>
-        
-        {promocoes
-          .filter(p => p.categoria === 'Promoção da semana')
-          .map(produto => (
-              <div className={styles.highlightCard}>
-                <div className={styles.badge}>Mais pedido</div>
+
+        <div className={styles.promoGrid}>
+          {promocoes
+            .filter(p => p.categoria === 'Promoções da semana')
+            .map(produto => (
+              <div key={produto.id || produto.nome} className={styles.highlightCard}>
+                {Math.random() > 0.7 && <div className={styles.badge}>Mais pedido</div>}
+                {/* <div className={styles.badge}>Mais pedido</div> */}
                 <img
                   src={produto.imagem}
                   alt="Combo Casal"
@@ -129,7 +139,8 @@ function Promocoes() {
                   <button onClick={() => handleAdicionar(produto)}>Adicionar ao carrinho</button>
                 </div>
               </div>
-          ))};
+            ))}
+        </div>
       </section>
 
       {/* COMBOS */}
