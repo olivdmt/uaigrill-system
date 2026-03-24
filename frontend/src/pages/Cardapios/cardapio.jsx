@@ -20,7 +20,7 @@ function Cardapio() {
         const dados = await pedidoService.getTodos();
         setProdutos(dados);
       } catch (error) {
-        console.error("Erro loagind menu: ", error);
+        console.error("Erro loaging menu: ", error);
       } finally {
         setLoading(false);
       }

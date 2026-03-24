@@ -20,6 +20,16 @@ export const pedidoService = {
         }
     },
 
+    getPromotion: async () => {
+        try {
+            const res = await api.get('/promocoes');
+            return res.data;
+        } catch (error) {
+            console.error('Erro ao buscar promoçoes', error);
+            throw error;
+        }
+    },
+
     // Enviar o carrinho e o cupom para criar o pedido
     criarPedido: async (dados) => {
         try {

@@ -1,8 +1,53 @@
+import { useState, useEffect } from 'react';
+import { pedidoService } from '../../services/pedidoService';
+import { useCart } from '../../context/CartContext';
+import toast from 'react-hot-toast'
+import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import styles from './promocoes.module.css';
 import logo from '../../assets/logoUaiGrill-01.png';
 
 function Promocoes() {
+  // Atributo que criamos para adicionar ao carrinho
+  const {addToCart, cart} = useCart();
+  const [promocoes, setPromocoes] = useState([]); // Array vazio
+  const [loading, setLoading] = useState(true);
+
+  // useEffect para carregador os dados ao atualizar a página
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        // Instânciamos diretamente de pedidos para listar todos os pedidos
+        const dados = await pedidoService.getPromotion();
+        // Recebe os dados que estão retornando de "pedidoService"
+        setPromocoes(dados);
+      } catch (error) {
+        console.error("Erro loading promotion: ", error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    carregarDados();
+  }, []);
+
+  const handleAdicionar = (promocao) => {
+    addToCart(promocao); // Chama a função do context
+    toast.success(`${promocao.nome} adicionado ao carrinho!`, {
+      style: {
+        border: '1px solid #ff6b00',
+        padding: '16px',
+        color: '#333',
+        borderBottom: 'rgba(15, 23, 42, 0.06)',
+        background: 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(10px)'
+      },
+      iconTheme: {
+        primary: '#ff6b00',
+        secondary: '#fffaee',
+      },
+    });
+  };
+
   return (
     <div className={styles.container}>
       {/* HEADER */}
@@ -60,74 +105,31 @@ function Promocoes() {
           <h2>Promoções da semana</h2>
           <p>As ofertas mais procuradas para aproveitar mais sabor pagando menos.</p>
         </div>
+        
+        {promocoes
+          .filter(p => p.categoria === 'Promoção da semana')
+          .map(produto => (
+              <div className={styles.highlightCard}>
+                <div className={styles.badge}>Mais pedido</div>
+                <img
+                  src={produto.imagem}
+                  alt="Combo Casal"
+                />
+                <div className={styles.cardContent}>
+                  <h3>{produto.nome}</h3>
+                  <p>
+                    {produto.descricao}
+                  </p>
 
-        <div className={styles.highlightGrid}>
-          <div className={styles.highlightCard}>
-            <div className={styles.badge}>Mais pedido</div>
-            <img
-              src="https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Combo Casal"
-            />
-            <div className={styles.cardContent}>
-              <h3>Combo Casal</h3>
-              <p>
-                2 X-Tudo + batata frita + refrigerante 2L para dividir e
-                aproveitar.
-              </p>
+                  <div className={styles.priceRow}>
+                    <span className={styles.oldPrice}>R$ 72,90</span>
+                    <span className={styles.newPrice}>{produto.preco}</span>
+                  </div>
 
-              <div className={styles.priceRow}>
-                <span className={styles.oldPrice}>R$ 72,90</span>
-                <span className={styles.newPrice}>R$ 59,90</span>
+                  <button onClick={() => handleAdicionar(produto)}>Adicionar ao carrinho</button>
+                </div>
               </div>
-
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
-
-          <div className={styles.highlightCard}>
-            <div className={styles.badge}>Oferta</div>
-            <img
-              src="https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Pizza em Dobro"
-            />
-            <div className={styles.cardContent}>
-              <h3>Pizza em Dobro</h3>
-              <p>
-                Na compra de 2 pizzas grandes, ganhe desconto especial no valor
-                final.
-              </p>
-
-              <div className={styles.priceRow}>
-                <span className={styles.oldPrice}>R$ 119,80</span>
-                <span className={styles.newPrice}>R$ 99,90</span>
-              </div>
-
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
-
-          <div className={styles.highlightCard}>
-            <div className={styles.badge}>Imperdível</div>
-            <img
-              src="https://images.pexels.com/photos/1893555/pexels-photo-1893555.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Batata Suprema"
-            />
-            <div className={styles.cardContent}>
-              <h3>Batata Suprema</h3>
-              <p>
-                Batata frita com cheddar, bacon crocante e molho especial da
-                casa.
-              </p>
-
-              <div className={styles.priceRow}>
-                <span className={styles.oldPrice}>R$ 39,90</span>
-                <span className={styles.newPrice}>R$ 32,90</span>
-              </div>
-
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
-        </div>
+          ))};
       </section>
 
       {/* COMBOS */}
