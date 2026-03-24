@@ -13,6 +13,35 @@ function Promocoes() {
   const [promocoes, setPromocoes] = useState([]); // Array vazio
   const [loading, setLoading] = useState(true);
 
+  // efeito para controlar o loading
+  useEffect(() => {
+    if (loading) {
+      Swal.fire({
+        title: 'Processando Dados',
+        html: 'Aguarde um momento enquanto preparamos tudo...',
+        allowOutsideClick: false, // Impede de fechar clicando fora da caixa
+        allowEscapeKey: false, // Impede de fechar apertando a tecla ESC
+        showConfirmButton: false,
+
+        // Customização visual
+        width: '400px',
+        padding: '3em',
+        color: '#1e293b',
+        backdrop: 'swal-custom-backdrop', // Aplica a classe CSS do fundo blur
+        customClass: {
+          popup: 'swal-custom-poup', // aplica a classe CSS do card 
+        },
+        // Ciclo de vida
+        didOpen: () => {
+          // Assim que o modal abrir visualmente, ele inicia o spinner de laoading
+          Swal.showLoading();
+        }
+      });
+    } else {
+      Swal.close();
+    }
+  }, [loading]);
+
   // useEffect para carregador os dados ao atualizar a página
   useEffect(() => {
     async function carregarDados() {
@@ -31,11 +60,7 @@ function Promocoes() {
   }, []);
 
   if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <p>Carregando as melhores ofertas do UaiGrill...</p>
-      </div>
-    );
+    console.log('Okay!')
   }
 
   const handleAdicionar = (promocao) => {
@@ -117,26 +142,26 @@ function Promocoes() {
         <div className={styles.promoGrid}>
           {promocoes
             .filter(p => p.categoria === 'Promoções da semana')
-            .map(produto => (
-              <div key={produto.id || produto.nome} className={styles.highlightCard}>
+            .map(promocao => (
+              <div key={promocao.id || promocao.nome} className={styles.highlightCard}>
                 {Math.random() > 0.7 && <div className={styles.badge}>Mais pedido</div>}
                 {/* <div className={styles.badge}>Mais pedido</div> */}
                 <img
-                  src={produto.imagem}
+                  src={promocao.imagem}
                   alt="Combo Casal"
                 />
                 <div className={styles.cardContent}>
-                  <h3>{produto.nome}</h3>
+                  <h3>{promocao.nome}</h3>
                   <p>
-                    {produto.descricao}
+                    {promocao.descricao}
                   </p>
 
                   <div className={styles.priceRow}>
                     <span className={styles.oldPrice}>R$ 72,90</span>
-                    <span className={styles.newPrice}>{produto.preco}</span>
+                    <span className={styles.newPrice}>R$ {promocao.preco}</span>
                   </div>
 
-                  <button onClick={() => handleAdicionar(produto)}>Adicionar ao carrinho</button>
+                  <button onClick={() => handleAdicionar(promocao)}>Adicionar ao carrinho</button>
                 </div>
               </div>
             ))}
@@ -152,61 +177,28 @@ function Promocoes() {
         </div>
 
         <div className={styles.promoGrid}>
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Combo Individual"
-            />
-            <div className={styles.promoContent}>
-              <h3>Combo Individual</h3>
-              <p>X-Burguer + fritas + refrigerante lata.</p>
-              <span className={styles.oldPrice}>R$ 34,90</span>
-              <span className={styles.newPrice}>R$ 27,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+          {promocoes.filter(p => p.categoria === 'Combos promocionais')
+            .map(promocao => (
+              <div className={styles.promoCard}>
+                <img
+                  src={promocao.imagem}
+                  alt="Combo Individual"
+                />
+                <div className={styles.promoContent}>
+                  <h3>{promocao.nome}</h3>
+                  <p>
+                    {promocao.descricao}
+                  </p>
 
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/2983101/pexels-photo-2983101.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Combo Casal Premium"
-            />
-            <div className={styles.promoContent}>
-              <h3>Combo Casal Premium</h3>
-              <p>2 lanches premium + porção + refrigerante 2L.</p>
-              <span className={styles.oldPrice}>R$ 89,90</span>
-              <span className={styles.newPrice}>R$ 74,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+                  <div className={styles.priceRow}>
+                    <span className={styles.oldPrice}>R$ 34,90</span>
+                    <span className={styles.newPrice}>R$ {promocao.preco}</span>
+                  </div>
 
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Combo Família"
-            />
-            <div className={styles.promoContent}>
-              <h3>Combo Família</h3>
-              <p>2 pizzas grandes + refrigerante 2L com valor promocional.</p>
-              <span className={styles.oldPrice}>R$ 128,90</span>
-              <span className={styles.newPrice}>R$ 109,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
-
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/1269025/pexels-photo-1269025.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Combo Happy Hour"
-            />
-            <div className={styles.promoContent}>
-              <h3>Combo Happy Hour</h3>
-              <p>Porção especial + torre de chopp com preço reduzido.</p>
-              <span className={styles.oldPrice}>R$ 59,90</span>
-              <span className={styles.newPrice}>R$ 46,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+                  <button onClick={() => handleAdicionar(promocao)}>Adicionar ao carrinho</button>
+                </div>
+              </div>
+            ))}
         </div>
       </section>
 
@@ -219,61 +211,27 @@ function Promocoes() {
         </div>
 
         <div className={styles.promoGrid}>
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/1269025/pexels-photo-1269025.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Caipirinha em dobro"
-            />
-            <div className={styles.promoContent}>
-              <h3>Caipirinha em Dobro</h3>
-              <p>Peça 2 unidades com valor especial por tempo limitado.</p>
-              <span className={styles.oldPrice}>R$ 33,80</span>
-              <span className={styles.newPrice}>R$ 28,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+          {promocoes.filter(p => p.categoria === 'Promoções para brindar')
+            .map(promocao => (
+              <div className={styles.promoCard}>
+                <img
+                  src={promocao.imagem}
+                  alt="Caipirinha em Dobro"
+                />
 
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/5947010/pexels-photo-5947010.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Gin Tônica Especial"
-            />
-            <div className={styles.promoContent}>
-              <h3>Gin Tônica Especial</h3>
-              <p>Drink completo com desconto na semana promocional.</p>
-              <span className={styles.oldPrice}>R$ 24,90</span>
-              <span className={styles.newPrice}>R$ 19,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+                <div className={styles.promoContent}>
+                  <h3>{promocao.nome}</h3>
+                  <p>{promocao.descricao}</p>
 
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/602750/pexels-photo-602750.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Mojito Tropical"
-            />
-            <div className={styles.promoContent}>
-              <h3>Mojito Tropical</h3>
-              <p>Refrescante, aromático e com preço especial.</p>
-              <span className={styles.oldPrice}>R$ 21,90</span>
-              <span className={styles.newPrice}>R$ 17,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+                  <div className={styles.priceRow}>
+                    <span className={styles.oldPrice}>R$ 33,80</span>
+                    <span className={styles.newPrice}>R$ {promocao.preco}</span>
+                  </div>
 
-          <div className={styles.promoCard}>
-            <img
-              src="https://images.pexels.com/photos/2531188/pexels-photo-2531188.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Drink da Casa"
-            />
-            <div className={styles.promoContent}>
-              <h3>Drink da Casa</h3>
-              <p>Sabor exclusivo preparado com frutas e toque especial.</p>
-              <span className={styles.oldPrice}>R$ 23,90</span>
-              <span className={styles.newPrice}>R$ 18,90</span>
-              <button>Adicionar ao carrinho</button>
-            </div>
-          </div>
+                  <button onClick={() => handleAdicionar(promocao)}>Adicionar ao carrinho</button>
+                </div>
+              </div>
+            ))}
         </div>
       </section>
 
